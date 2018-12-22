@@ -7,4 +7,5 @@ git pull // get the changes made by others to your repository
 git remote or git remote -v // list the remotes
 git push origin master // push to github "git push remote branch"
 git checkout -b amend-my-name // create a new branch
-git checkout master // get back to the master repository 
+git checkout master // get back to the master repository
+git pull origin master // get changes from github to your master repo
