@@ -11,9 +11,10 @@ var info = "[+] ";
 var app1 = express();
 console.log(info+ "initialization");
 app1.use(function(req , res ,next) {
+  console.log(req.body['search']);
   console.log(info +'Use callback');
   // all web scraping
-  var url = "https://www.avito.ma/fr/maroc/mac";
+  var url = "https://www.avito.ma/fr/maroc/iphone8";
   // send a request to the url and get the html response;
   request(url, function(error,response,html) {
     if(!error)
@@ -82,6 +83,7 @@ app1.get("/",function (req,res) {
           console.log('filelistAsync complete');
         });
       });
+
       res.sendFile('index.html' , { root : __dirname});
         /*
     var html = "<h3>"+ item.title +"</h3>";
