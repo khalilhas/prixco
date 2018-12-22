@@ -1,0 +1,10 @@
+git clone url
+git status
+git commit -a -m "Comment for the commit"
+git log -2 // last 2 commits
+git push // send you changes to github
+git pull // get the changes made by others to your repository
+git remote or git remote -v // list the remotes
+git push origin master // push to github "git push remote branch"
+git checkout -b amend-my-name // create a new branch
+git checkout master // get back to the master repository 

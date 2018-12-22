@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head>
+    <meta charset="utf-8">
+    <title>Price Comparator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+      /*
+        Author : Khalil Hassebi
+        website: Prixco
+        Year: 2018
+      */
+      body{}
+      *{font-family: "Myriad Pro";}
+      tbody tr:hover{ background-color:#e9ecef;}
+      #title{font-weight: bold;color:#fff;text-align: center;width:80%;float:left;}
+      .title-bar{
+        float:left;
+        padding:10px;
+        text-align: center;
+        background: linear-gradient(
+                    to bottom,
+                    black,
+                    transparent
+                  );
+        position: fixed;
+        top:0;
+        display: block;
+        width:100%;
+        height: 40px;
+        -webkit-app-region: drag;}
+      .roundbtn{-webkit-app-region:no-drag; width: 12px;height: 12px;background: red;float:right;margin-left: 5px;border-radius: 40px;}
+      #win-close-btn{background:#fc5d57; }
+      #win-close-btn:hover{background:#fc5d59; }
+      #win-minmax-btn{background:#ffbc33; }
+      #win-minmax-btn:hover{background:#ffbc37; }
+      #win-minimize-btn{background:#03cb4e; }
+      #win-minimize-btn:hover{background:#03cb4f; }
+      .btns{width:20%;float:left;margin-top: 5px;}
+    </style>
+  </head>
+
+  <body>
+    <div class="title-bar">
+      <p id="title">PrixCo</p>
+      <div class="btns">
+        <span id="win-close-btn" class="roundbtn"></span>
+        <span id="win-minmax-btn" class="roundbtn"></span>
+        <span id="win-minimize-btn" class="roundbtn"></span>
+      </div>
+    </div>
+    <div class="container">
+        <h2 style="padding: 20px;">Prixco:</h2>
+        <h5 id="rms">Moyenne: 3688.63 dh</h5>
+        <form>
+            <input type="search" placeholder="Search...">
+        </form>
+      <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th scope="col">Price (dh)</th>
+          <th scope="col">location</th>
+        </tr>
+      </thead>
+      <tbody><tr><th scope="row">1</th><td> Raspberry Pi 3 Bplus avec Carte MSD 16GB </td><td>550</td><td><a href="https://www.avito.ma/fr/derb_ghallef/accessoires_informatique_et_gadgets/Raspberry_Pi_3_Bplus_avec_Carte_MSD_16GB_28792033.htm">Accessoires informatique et Gadgets, Casablanca</a></td></tr><tr><th scope="row">2</th><td> Bouton camera v </td><td>500</td><td><a href="https://www.avito.ma/fr/rabat/appareils_photo_cameras/Bouton_camera_v__30235884.htm">Appareils photo et Cam&#xE9;ras, Rabat</a></td></tr><tr><th scope="row">3</th><td> Mac Book pro 2017 </td><td>9700</td><td><a href="https://www.avito.ma/fr/temara/ordinateurs_portables/Mac_Book_pro_2017_32085346.htm">Ordinateurs portables, Temara</a></td></tr><tr><th scope="row">4</th><td> Mac Air 2017 Intel Core i5 /1.8 GHZ / 512SSD </td><td>16800</td><td><a href="https://www.avito.ma/fr/oujda/ordinateurs_portables/Mac_Air_2017_Intel_Core_i5__1_8_GHZ___512SSD_31976203.htm">Ordinateurs portables, Oujda</a></td></tr><tr><th scope="row">5</th><td> Mac Air 2017 Intel Core i5 /1.8 GHZ / 13 Pouces </td><td>16800</td><td><a href="https://www.avito.ma/fr/ouarzazate/ordinateurs_portables/Mac_Air_2017_Intel_Core_i5__1_8_GHZ___13_Pouces_31975160.htm">Ordinateurs portables, Ouarzazate</a></td></tr><tr><th scope="row">6</th><td> Mac Air 2017 Intel Core i5 /1.8 GHZ </td><td>16800</td><td><a href="https://www.avito.ma/fr/tanger/ordinateurs_portables/Mac_Air_2017_Intel_Core_i5__1_8_GHZ_31971497.htm">Ordinateurs portables, Tanger</a></td></tr><tr><th scope="row">7</th><td> Mac Air 2017 Intel Core i5 /1.8 GHZ / 13 Pouces </td><td>16800</td><td><a href="https://www.avito.ma/fr/al_hociema/ordinateurs_portables/Mac_Air_2017_Intel_Core_i5__1_8_GHZ___13_Pouces_31971253.htm">Ordinateurs portables, Al Hoce&#xEF;ma</a></td></tr><tr><th scope="row">8</th><td> Mac Air 2017 Intel Core i5 /1.8 GHZ / 13 Pouces </td><td>16800</td><td><a href="https://www.avito.ma/fr/t&#xE9;touan/ordinateurs_portables/Mac_Air_2017_Intel_Core_i5__1_8_GHZ___13_Pouces_31970955.htm">Ordinateurs portables, T&#xE9;touan</a></td></tr><tr><th scope="row">9</th><td> Routeur Huawei E5172 libre 4G/LTE- WiFi-N150 </td><td>690</td><td><a href="https://www.avito.ma/fr/yacoub_el_mansour/accessoires_informatique_et_gadgets/Routeur_Huawei_E5172_libre_4G_LTE__WiFi_N150_32084511.htm">Accessoires informatique et Gadgets, Rabat</a></td></tr><tr><th scope="row">10</th><td> 12 pinceaux mac dans une belle Etui </td><td>99</td><td><a href="https://www.avito.ma/fr/ain_sebaa/produits_de_beaute/12_pinceaux_mac_dans_une_belle_Etui_32084434.htm">Produits de beaut&#xE9;, Casablanca</a></td></tr><tr><th scope="row">11</th><td> Un lot des imac 21.5 pouce ann&#xE9;e 2011 detail/gros </td><td>4793</td><td><a href="https://www.avito.ma/fr/casablanca/ordinateurs_bureau/Un_lot_des_imac_21_5_pouce_ann&#xE9;e_2011_detail_gros_32084195.htm">Ordinateurs de bureau, Casablanca</a></td></tr><tr><th scope="row">12</th><td> UN LOT DES APPLE iMac 2012 Core i5 - 16 GB / 1TB / </td><td>6990</td><td><a href="https://www.avito.ma/fr/casablanca/ordinateurs_bureau/UN_LOT_DES_APPLE_iMac_2012_Core_i5___16_GB___1TB___32083723.htm">Ordinateurs de bureau, Casablanca</a></td></tr><tr><th scope="row">13</th><td> Abonnement IPTV </td><td>300</td><td><a href="https://www.avito.ma/fr/bernoussi/image_et_son/Abonnement_IPTV_30632137.htm">Image &amp; Son, Casablanca</a></td></tr><tr><th scope="row">14</th><td> Bouton camera / nouvelle g&#xE9;n&#xE9;ration </td><td>500</td><td><a href="https://www.avito.ma/fr/centre_ville/appareils_photo_cameras/Bouton_camera___nouvelle_g&#xE9;n&#xE9;ration_30517054.htm">Appareils photo et Cam&#xE9;ras, Casablanca</a></td></tr><tr><th scope="row">15</th><td> Micro record studio Mic Microphone condenser </td><td>650</td><td><a href="https://www.avito.ma/fr/marrakech/instruments_de_musique/Micro_record_studio_Mic_Microphone_condenser_32082112.htm">Instruments de Musique, Marrakech</a></td></tr><tr><th scope="row">16</th><td> Series sport iptv </td><td>100</td><td><a href="https://www.avito.ma/fr/2_mars/image_et_son/Series_sport_iptv_32081960.htm">Image &amp; Son, Casablanca</a></td></tr><tr><th scope="row">17</th><td> Micro pour studio Microphone Record Condenser </td><td>650</td><td><a href="https://www.avito.ma/fr/k&#xE9;nitra/instruments_de_musique/Micro_pour_studio_Microphone_Record_Condenser_32081834.htm">Instruments de Musique, K&#xE9;nitra</a></td></tr><tr><th scope="row">18</th><td> Macbook Toush Bar 2017 Intel Core i7 /2.8 GHZ </td><td>19580</td><td><a href="https://www.avito.ma/fr/la&#xE2;youne/ordinateurs_portables/Macbook_Toush_Bar_2017_Intel_Core_i7__2_8_GHZ_32019200.htm">Ordinateurs portables, La&#xE2;youne</a></td></tr></tbody>
+    </table>
+</div>
+  <script src="./renderer.js">
+  </script>
+
+
+</body></html>
