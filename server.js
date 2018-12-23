@@ -1,4 +1,3 @@
-// used to create a server;
 var express = require('express')
 var bodyParser = require('body-parser')
 // used to send http request
@@ -11,7 +10,7 @@ var info = "[+] ";
 var app1 = express();
 console.log(info+ "initialization");
 app1.use(function(req , res ,next) {
-  console.log(req.body['search']);
+  console.log(req.body.search);
   console.log(info +'Use callback');
   // all web scraping
   var url = "https://www.avito.ma/fr/maroc/iphone8";
@@ -93,6 +92,7 @@ app1.get("/",function (req,res) {
     // res.send(html);
 
 })
+// get the search value
 app1.listen('8080');
 
 const { app, BrowserWindow } = require('electron');
