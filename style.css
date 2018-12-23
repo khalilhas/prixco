@@ -61,4 +61,4 @@ tbody tr:hover{ background-color:#e9ecef;}
 /* FORM STYLING */
 form input{ border:1px solid grey;float:right;padding:10px;margin-bottom:10px;width:100%;}
 /* */
-#deleteitem{ width:10px;height: 10px;}
+.deleteitem{ width:10px;height: 10px;}
