@@ -1,3 +1,4 @@
+// used to create a server;
 var express = require('express')
 var bodyParser = require('body-parser')
 // used to send http request
@@ -9,11 +10,10 @@ var cheerio = require('cheerio')
 var info = "[+] ";
 var app1 = express();
 console.log(info+ "initialization");
-app1.use(function(req , res ,next) {
-  console.log(req.body.search);
-  console.log(info +'Use callback');
+app1.use(function(req , res, next ) {
   // all web scraping
-  var url = "https://www.avito.ma/fr/maroc/iphone8";
+  var url = 'https://www.avito.ma/fr/maroc/mac';
+  var json;
   // send a request to the url and get the html response;
   request(url, function(error,response,html) {
     if(!error)
@@ -21,7 +21,7 @@ app1.use(function(req , res ,next) {
         // load the response and make it browesable using jquery
         var $ = cheerio.load(html);
         var title , price , urldesc;
-        var json  = { "item":[]}
+        json  = { "item":[]};
         for(var i = 0; i < $('.fs14').length; i= i + 2)
         {
             $('.fs14 > a').eq(i).filter(function()
@@ -44,55 +44,48 @@ app1.use(function(req , res ,next) {
                 {
                   delete json.item[i];
                 }
-              })
-          }
-          req.body = json;
-          console.log(json);
-          next();
+              });
+        }
+        var item;
+        // edit the html file to insert the results
+        fs.readFile('index.html',(err, data) => {
+            var $ = cheerio.load(data);
+            if (err) throw err;
+            var count =0;
+            // RMS of prices
+            var rms = 0;
+            // remove old list and update the list
+            $('tbody').empty();
+            // create list of items in the html file
+            for(var i = 0; i <  json.item.length;i++)
+            {
+              item = json.item[i];
+              if(item == undefined){continue;}
+              count++;
+              rms += item.price;
+              console.log("append elements");
+              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td></tr>");
+            }
+            // calculate and display the changes
+            $('#rms').text("Moyenne: "+ (rms / json.item.length).toFixed(2) +" dh");
+            // write the changes in the html file
+            fs.writeFile('index.html',$.html(),'utf-8', function (err) {
+              if (err) throw err
+              console.log('filelistAsync complete');
+            });
+          });
+
     }
     else {
-      console.log(info+"error sending the request"+error)
+      console.log(info+"error sending the request"+error);
+      res.send("Error 403");
     }
-  });
-})
-app1.get("/",function (req,res) {
-      console.log(info+" get function");
-      var item
-      // edit the html file to insert the results
-      fs.readFile('index.html',(err, data) => {
-        if (err) throw err;
-        var $ = cheerio.load(data);
-        var count =0;
-        // RMS of prices
-        var rms = 0;
-        // remove old list and update the list
-        $('tbody').empty();
 
-        for(var i = 0; i <  req.body.item.length;i++)
-        {
-          item = req.body.item[i];
-          if(item == undefined){continue;}
-          count++;
-          rms += item.price;
-          $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td></tr>");
-        }
-        $('#rms').text("Moyenne: "+ (rms / req.body.item.length).toFixed(2) +" dh");
-        fs.writeFile('index.html',$.html(),'utf-8', function (err) {
-          if (err) throw err
-          console.log('filelistAsync complete');
-        });
-      });
+    });
+  res.sendFile('index.html' , { root : __dirname});
 
-      res.sendFile('index.html' , { root : __dirname});
-        /*
-    var html = "<h3>"+ item.title +"</h3>";
-    html = html + "prix: <b>"+ item.price +"</b> dh</br>";
-    html = html + "location: <a href='"+ item.urldesc +"'>"+ item.location + "</a>";
-    */
-    // res.send(html);
+});
 
-})
-// get the search value
 app1.listen('8080');
 
 const { app, BrowserWindow } = require('electron');
