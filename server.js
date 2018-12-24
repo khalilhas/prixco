@@ -6,9 +6,10 @@ var request = require('request')
 var fs = require('fs')
 // Jquery
 var cheerio = require('cheerio')
-
 var info = "[+] ";
 var app1 = express();
+// search value
+var search = "mac";
 console.log(info+ "initialization");
 app1.use(function(req , res, next ) {
   // all web scraping
@@ -34,6 +35,11 @@ app1.use(function(req , res, next ) {
 
                 json.item[i].urldesc = url;
                 json.item[i].location =   $('.fs14 > small > a').eq(i).text();
+                if(title.toLowerCase().search(search.toLowerCase()) == -1)
+                {
+                  delete json.item[i];
+                  continue;
+                }
             });
             $('.price_value').eq(i).filter(function()
               {

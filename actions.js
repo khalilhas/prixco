@@ -16,7 +16,6 @@ for(let tr of tbody.getElementsByTagName('tr'))
     for(var i = 0; i < tbody.getElementsByTagName('tr').length + 1 ; i++)
     {
 
-
       if(tbody.getElementsByTagName('tr')[i])
       {
         price += parseInt(tbody.getElementsByTagName('tr')[i].getElementsByTagName('td')[1].innerHTML.replace(/\s/g, ''));
