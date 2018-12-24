@@ -63,8 +63,7 @@ app1.use(function(req , res, next ) {
               if(item == undefined){continue;}
               count++;
               rms += item.price;
-              console.log("append elements");
-              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td><a href=''><img class='deleteitem' src='./img/close.png'/></a></td></tr>");
+              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='./img/close.png'/></td></tr>");
             }
             // calculate and display the changes
             $('#rms').text("Moyenne: "+ (rms / json.item.length).toFixed(2) +" dh");
