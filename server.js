@@ -1,26 +1,27 @@
 // used to create a server;
-var express = require('express')
-var bodyParser = require('body-parser')
+var express = require('express');
 // used to send http request
-var request = require('request')
-var fs = require('fs')
+var request = require('request');
+var fs = require('fs');
 // Jquery
 var cheerio = require('cheerio')
 var info = "[+] ";
 var app1 = express();
 // search value
 var search = "mac";
+var numberofitems = 0;
 console.log(info+ "initialization");
 app1.use(function(req , res, next ) {
   // all web scraping
   var url = 'https://www.avito.ma/fr/maroc/mac';
   var json;
   // send a request to the url and get the html response;
-  request(url, function(error,response,html) {
+  request(url, function(error,response,body) {
     if(!error)
     {
+        numberofitems = 0;
         // load the response and make it browesable using jquery
-        var $ = cheerio.load(html);
+        var $ = cheerio.load(body);
         var title , price , urldesc;
         json  = { "item":[]};
         for(var i = 0; i < $('.fs14').length; i= i + 2)
@@ -32,25 +33,31 @@ app1.use(function(req , res, next ) {
                 url = data.attr("href");
                 json.item[i]={"title":"","price":"","urldesc":"","location":""};
                 json.item[i].title = title;
-
                 json.item[i].urldesc = url;
                 json.item[i].location =   $('.fs14 > small > a').eq(i).text();
-                if(title.toLowerCase().search(search.toLowerCase()) == -1)
+                if(json.item[i].title.search(/mac/i) == (-1))
                 {
-                  delete json.item[i];
-                  continue;
+                  json.item[i] = null;
                 }
             });
+
             $('.price_value').eq(i).filter(function()
               {
                 var data = $(this);
                 price = data.text();
-                json.item[i].price = parseInt(price.replace(/\s/g, ''));
-                if(!json.item[i].price)
+                if(json.item[i] != null)
                 {
-                  delete json.item[i];
+                  json.item[i].price = parseInt(price.replace(/\s/g, ''));
+                  if(!json.item[i].price)
+                  {
+                    json.item[i] = null;
+                  }else
+                  {
+                    numberofitems += 1;
+                  }
                 }
               });
+
         }
         var item;
         // edit the html file to insert the results
@@ -63,23 +70,27 @@ app1.use(function(req , res, next ) {
             // remove old list and update the list
             $('tbody').empty();
             // create list of items in the html file
-            for(var i = 0; i <  json.item.length;i++)
+            for(var i = 0; i <   json.item.length ;i++)
             {
               item = json.item[i];
-              if(item == undefined){continue;}
+              if((item == undefined) || (item == null )){delete item;continue;}
+              console.log(item.title);
+              console.log(item.price);
+
               count++;
               rms += item.price;
-              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='./img/close.png'/></td></tr>");
+              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='img/close.png'/></td></tr>");
             }
+            console.log(rms);
+            console.log(info + numberofitems);
             // calculate and display the changes
-            $('#rms').text("Moyenne: "+ (rms / json.item.length).toFixed(2) +" dh");
+            $('#rms').text("Moyenne: "+ (rms / numberofitems).toFixed(2) +" dh");
             // write the changes in the html file
             fs.writeFile('index.html',$.html(),'utf-8', function (err) {
               if (err) throw err
-              console.log('filelistAsync complete');
-            });
+              });
           });
-
+          res.sendFile('index.html' , { root : __dirname});
     }
     else {
       console.log(info+"error sending the request"+error);
@@ -87,10 +98,8 @@ app1.use(function(req , res, next ) {
     }
 
     });
-  res.sendFile('index.html' , { root : __dirname});
 
 });
-
 app1.listen('8080');
 
 const { app, BrowserWindow } = require('electron');
@@ -104,7 +113,7 @@ function createWindow () {
   win = new BrowserWindow({ width: 800, height: 600 ,frame: false})
 
   // and load the index.html of the app.
-  win.loadFile('index.html')
+  win.loadURL(`file://${__dirname}/index.html`)
 
   // Open the DevTools.
   win.webContents.openDevTools()
