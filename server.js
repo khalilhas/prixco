@@ -11,9 +11,18 @@ var app1 = express();
 var search = "mac";
 var numberofitems = 0;
 console.log(info+ "initialization");
-app1.use(function(req , res, next ) {
+app1.use('/',function(req , res ) {
   // all web scraping
-  var url = 'https://www.avito.ma/fr/maroc/mac';
+  if(req.query.q)
+  {
+      search = req.query.q;
+  }
+
+
+  var url = 'https://www.avito.ma/fr/maroc/'+ search.replace(/[^a-zA-Z0-9]/g,'-');;
+  console.log(url);
+  console.log(search);
+  console.log(search.replace(/[^a-zA-Z0-9]/g,'-'));
   var json;
   // send a request to the url and get the html response;
   request(url, function(error,response,body) {
@@ -35,7 +44,10 @@ app1.use(function(req , res, next ) {
                 json.item[i].title = title;
                 json.item[i].urldesc = url;
                 json.item[i].location =   $('.fs14 > small > a').eq(i).text();
-                if(json.item[i].title.search(/mac/i) == (-1))
+                var regex1 = new RegExp(`${search}`, 'i');
+                console.log(json.item[i].title);
+                console.log(json.item[i].title.search(regex1));
+                if(json.item[i].title.search(regex1) == (-1))
                 {
                   json.item[i] = null;
                 }
@@ -74,15 +86,11 @@ app1.use(function(req , res, next ) {
             {
               item = json.item[i];
               if((item == undefined) || (item == null )){delete item;continue;}
-              console.log(item.title);
-              console.log(item.price);
 
               count++;
               rms += item.price;
-              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='img/close.png'/></td></tr>");
+              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='http://localhost:8080/img/"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='img/close.png'/></td></tr>");
             }
-            console.log(rms);
-            console.log(info + numberofitems);
             // calculate and display the changes
             $('#rms').text("Moyenne: "+ (rms / numberofitems).toFixed(2) +" dh");
             // write the changes in the html file
@@ -102,50 +110,50 @@ app1.use(function(req , res, next ) {
 });
 app1.listen('8080');
 
-const { app, BrowserWindow } = require('electron');
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win
-
-function createWindow () {
-  // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600 ,frame: false})
-
-  // and load the index.html of the app.
-  win.loadURL(`file://${__dirname}/index.html`)
-
-  // Open the DevTools.
-  win.webContents.openDevTools()
-  win.setAutoHideMenuBar(true)
-  // Emitted when the window is closed.
-  win.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    win = null
-  })
-}
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
-
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createWindow()
-  }
-})
-exports= module.exports = app1;
+// const { app, BrowserWindow } = require('electron');
+//
+// // Keep a global reference of the window object, if you don't, the window will
+// // be closed automatically when the JavaScript object is garbage collected.
+// let win
+//
+// function createWindow () {
+//   // Create the browser window.
+//   win = new BrowserWindow({ width: 800, height: 600 ,frame: false})
+//
+//   // and load the index.html of the app.
+//   win.loadURL(`file://${__dirname}/index.html`)
+//
+//   // Open the DevTools.
+//   win.webContents.openDevTools()
+//   win.setAutoHideMenuBar(true)
+//   // Emitted when the window is closed.
+//   win.on('closed', () => {
+//     // Dereference the window object, usually you would store windows
+//     // in an array if your app supports multi windows, this is the time
+//     // when you should delete the corresponding element.
+//     win = null
+//   })
+// }
+//
+// // This method will be called when Electron has finished
+// // initialization and is ready to create browser windows.
+// // Some APIs can only be used after this event occurs.
+// app.on('ready', createWindow)
+//
+// // Quit when all windows are closed.
+// app.on('window-all-closed', () => {
+//   // On macOS it is common for applications and their menu bar
+//   // to stay active until the user quits explicitly with Cmd + Q
+//   if (process.platform !== 'darwin') {
+//     app.quit()
+//   }
+// })
+//
+// app.on('activate', () => {
+//   // On macOS it's common to re-create a window in the app when the
+//   // dock icon is clicked and there are no other windows open.
+//   if (win === null) {
+//     createWindow()
+//   }
+// })
+// exports= module.exports = app1;
