@@ -27,3 +27,4 @@ for(let tr of tbody.getElementsByTagName('tr'))
     document.getElementById("rms").innerHTML = "Moyenne: " + price +" dh";
   });
 }
+// keep input value after submit FORM

@@ -11,7 +11,7 @@ var app1 = express();
 var search = "mac";
 var numberofitems = 0;
 console.log(info+ "initialization");
-app1.use('/',function(req , res ) {
+app1.use('/',function(req , res ,next) {
   // all web scraping
   if(req.query.q)
   {
@@ -20,9 +20,9 @@ app1.use('/',function(req , res ) {
 
 
   var url = 'https://www.avito.ma/fr/maroc/'+ search.replace(/[^a-zA-Z0-9]/g,'-');;
-  console.log(url);
-  console.log(search);
-  console.log(search.replace(/[^a-zA-Z0-9]/g,'-'));
+  // console.log(url);
+  // console.log(search);
+  // console.log(search.replace(/[^a-zA-Z0-9]/g,'-'));
   var json;
   // send a request to the url and get the html response;
   request(url, function(error,response,body) {
@@ -45,8 +45,8 @@ app1.use('/',function(req , res ) {
                 json.item[i].urldesc = url;
                 json.item[i].location =   $('.fs14 > small > a').eq(i).text();
                 var regex1 = new RegExp(`${search}`, 'i');
-                console.log(json.item[i].title);
-                console.log(json.item[i].title.search(regex1));
+                // console.log(json.item[i].title);
+                // console.log(json.item[i].title.search(regex1));
                 if(json.item[i].title.search(regex1) == (-1))
                 {
                   json.item[i] = null;
@@ -91,14 +91,17 @@ app1.use('/',function(req , res ) {
               rms += item.price;
               $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='http://localhost:8080/img/"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='img/close.png'/></td></tr>");
             }
+            // keep the value of the input after the submit
+            $('#searchBar').val(search);
             // calculate and display the changes
             $('#rms').text("Moyenne: "+ (rms / numberofitems).toFixed(2) +" dh");
             // write the changes in the html file
             fs.writeFile('index.html',$.html(),'utf-8', function (err) {
               if (err) throw err
+              res.sendFile('index.html' , { root : __dirname});
               });
           });
-          res.sendFile('index.html' , { root : __dirname});
+
     }
     else {
       console.log(info+"error sending the request"+error);
