@@ -18,6 +18,8 @@ var app1 = express();
 // search value
 var search = "mac";
 var numberofitems = 0;
+// variable that stores the html from the previous request
+var file_from_previous;
 console.log(info+ "initialization");
 app1.use(express.static('public'));
 app1.use('/',function(req , res ,next) {
@@ -112,11 +114,14 @@ app1.use('/',function(req , res ,next) {
             $('#searchBar').val(search);
             // calculate and display the changes
             $('#rms').text("Moyenne: "+ (rms / numberofitems).toFixed(2) +" dh");
+
             // write the changes in the html file
-            fs.writeFile('index.html',$.html(),'utf-8', function (err) {
-              if (err) throw err
-              res.sendFile('index.html' , { root : __dirname});
-              });
+            // fs.writeFile('index.html',$.html(),'utf-8', function (err) {
+            //   if (err) throw err
+            //   res.sendFile('index.html' , { root : __dirname});
+            //   });
+            // don't write the changes to index.html
+            res.send($.html());
           });
         console.log(info + "index Saved and sent to user");
     }
@@ -126,9 +131,13 @@ app1.use('/',function(req , res ,next) {
     }
 
     });
-
+  extract_from_avito();
 });
 app1.listen('8080');
+function extract_from_avito()
+{
+  console.log(info + "extracted");
+}
 
 // const { app, BrowserWindow } = require('electron');
 //
