@@ -89,7 +89,7 @@ app1.use('/',function(req , res ,next) {
 
               count++;
               rms += item.price;
-              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='http://localhost:8080/img/"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='img/close.png'/></td></tr>");
+              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='http://localhost:8080/img/close.png'/></td></tr>");
             }
             // keep the value of the input after the submit
             $('#searchBar').val(search);
