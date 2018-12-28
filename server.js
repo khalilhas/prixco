@@ -1,3 +1,11 @@
+
+// next task
+/*
+  # make it loop through about 5 pages of avito
+  # retrieve data from facebook market
+  # retrieve new item price from jumia or alibaba or gearbest
+
+*/
 // used to create a server;
 var express = require('express');
 // used to send http request
@@ -11,6 +19,7 @@ var app1 = express();
 var search = "mac";
 var numberofitems = 0;
 console.log(info+ "initialization");
+app1.use(express.static('public'));
 app1.use('/',function(req , res ,next) {
   // all web scraping
   if(req.query.q)
@@ -31,7 +40,7 @@ app1.use('/',function(req , res ,next) {
         numberofitems = 0;
         // load the response and make it browesable using jquery
         var $ = cheerio.load(body);
-        var title , price , urldesc;
+        var title , price , urldesc,img;
         json  = { "item":[]};
         for(var i = 0; i < $('.fs14').length; i= i + 2)
         {
@@ -45,14 +54,22 @@ app1.use('/',function(req , res ,next) {
                 json.item[i].urldesc = url;
                 json.item[i].location =   $('.fs14 > small > a').eq(i).text();
                 var regex1 = new RegExp(`${search}`, 'i');
-                // console.log(json.item[i].title);
-                // console.log(json.item[i].title.search(regex1));
+                var regex2 = new RegExp('avito','i');
+                // assign the source logo
+                if(json.item[i].urldesc.search(regex2) != (-1))
+                {
+                  json.item[i].img = "avito";
+                }else
+                {
+                  json.item[i].img = "a";
+                }
+                // remove unmatched elements
                 if(json.item[i].title.search(regex1) == (-1))
                 {
                   json.item[i] = null;
                 }
-            });
 
+            });
             $('.price_value').eq(i).filter(function()
               {
                 var data = $(this);
@@ -69,8 +86,8 @@ app1.use('/',function(req , res ,next) {
                   }
                 }
               });
-
         }
+        console.log(info + "items retrieved from server");
         var item;
         // edit the html file to insert the results
         fs.readFile('index.html',(err, data) => {
@@ -89,7 +106,7 @@ app1.use('/',function(req , res ,next) {
 
               count++;
               rms += item.price;
-              $('tbody').append("<tr><th scope='row'>" + count + "</th><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img src='http://localhost:8080/img/close.png'/></td></tr>");
+              $('tbody').append("<tr><th scope='row'>" + count + "</th><td><img src='./images/"+ item.img +".png' alt='"+ item.img +"' class='sourceimg'/></td><td>"+ item.title +"</td><td>" + item.price +"</td><td><a href='"+ item.urldesc +"'>"+ item.location +"</a></td><td class='deleteitem'><img class='close' src='/images/close.png'/></td></tr>");
             }
             // keep the value of the input after the submit
             $('#searchBar').val(search);
@@ -101,7 +118,7 @@ app1.use('/',function(req , res ,next) {
               res.sendFile('index.html' , { root : __dirname});
               });
           });
-
+        console.log(info + "index Saved and sent to user");
     }
     else {
       console.log(info+"error sending the request"+error);
